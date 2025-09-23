@@ -1,0 +1,116 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id             String         @id @default(uuid())
+  name           String
+  email          String         @unique
+  hashedPassword String
+  profileImage   String?
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  teams          TeamMember[]
+  createdTeams   Team[]         @relation("CreatedTeams")
+  meetings       Meeting[]
+  notes          Note[]
+  files          File[]
+  notifications  Notification[]
+}
+
+model Team {
+  id        String       @id @default(uuid())
+  name      String       @unique
+  createdBy User         @relation("CreatedTeams", fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime     @default(now())
+  members   TeamMember[]
+  meetings  Meeting[]
+  files     File[]
+}
+
+model TeamMember {
+  id       String   @id @default(uuid())
+  user     User     @relation(fields: [userId], references: [id])
+  userId   String
+  team     Team     @relation(fields: [teamId], references: [id])
+  teamId   String
+  role     Role
+  joinedAt DateTime @default(now())
+
+  @@unique([userId, teamId])
+}
+
+model Meeting {
+  id          String   @id @default(uuid())
+  team        Team     @relation(fields: [teamId], references: [id])
+  teamId      String
+  title       String
+  description String?  @db.Text
+  scheduledAt DateTime
+  createdBy   User     @relation(fields: [userId], references: [id])
+  userId      String
+  status      Status
+  notes       Note[]
+}
+
+model Note {
+  id        String   @id @default(uuid())
+  meeting   Meeting  @relation(fields: [meetingId], references: [id])
+  meetingId String
+  content   String   @db.Text
+  createdBy User     @relation(fields: [userId], references: [id])
+  userId    String
+  createdAt DateTime @default(now())
+}
+
+model File {
+  id         String   @id @default(uuid())
+  team       Team     @relation(fields: [teamId], references: [id])
+  teamId     String
+  uploadedBy User     @relation(fields: [userId], references: [id])
+  userId     String
+  fileUrl    String
+  fileName   String
+  fileType   String
+  uploadedAt DateTime @default(now())
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  user      User             @relation(fields: [userId], references: [id])
+  userId    String
+  type      NotificationType
+  content   String           @db.Text
+  isRead    Boolean
+  createdAt DateTime         @default(now())
+}
+
+enum Role {
+  OWNER
+  ADMIN
+  MEMBER
+  VIEWER
+}
+
+enum Status {
+  SCHEDULED
+  ONGOING
+  COMPLETED
+}
+
+enum NotificationType {
+  MEETING
+  FILE_UPLOAD
+}
