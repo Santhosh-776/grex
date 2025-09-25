@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { useAppTheme } from "@/hooks/useAppTheme";
 const Header: React.FC = () => {
     const router = useRouter();
-    const { isDark, isLight, toggleTheme } = useAppTheme();
+    const { isDark, toggleTheme } = useAppTheme();
     return (
         <header className="py-3 px-60  bg-gray-50 shadow-sm w-full flex justify-between items-center text-base">
             <div className="flex items-center space-x-4">
@@ -17,13 +17,13 @@ const Header: React.FC = () => {
             </div>
             <div className="flex space-x-2 items-center">
                 <span className="text-secondary cursor-pointer">
-                    {isLight ? (
-                        <Moon
+                    {isDark ? (
+                        <Sun
                             className="w-10 h-4"
                             onClick={toggleTheme}
                         />
                     ) : (
-                        <Sun
+                        <Moon
                             className="w-10 h-4"
                             onClick={toggleTheme}
                         />

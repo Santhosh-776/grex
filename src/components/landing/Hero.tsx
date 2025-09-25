@@ -6,8 +6,6 @@ import {
     Calendar,
     FileText,
     Clock,
-    Moon,
-    Sun,
     ArrowRight,
     Play,
 } from "lucide-react";
