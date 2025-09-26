@@ -6,16 +6,12 @@ import {
     Calendar,
     FileText,
     Clock,
-    Moon,
-    Sun,
     ArrowRight,
     Play,
 } from "lucide-react";
 import Link from "next/link";
-import { useAppTheme } from "@/hooks/useAppTheme";
 const Home: React.FC = () => {
-    const { isDark } = useAppTheme();
-    const darkMode = isDark;
+    const darkMode = false;
     const features = [
         {
             icon: Users,
