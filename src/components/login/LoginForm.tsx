@@ -1,8 +1,9 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
+
+import { useAppContext } from "@/context/AppContext";
 
 const LoginForm = () => {
     const router = useRouter();
@@ -10,26 +11,19 @@ const LoginForm = () => {
     const [password, setPassword] = useState("");
     const [showPassword, setShowPassword] = useState(false);
     const [rememberMe, setRememberMe] = useState(false);
-    const [error, setError] = useState("");
+    const { login, error } = useAppContext();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!email || !password) {
-            setError("Please fill in all fields");
             return;
         }
         try {
-            const res = await axios.post("/api/auth/login", {
-                email,
-                password,
-                rememberMe,
-            });
-            if (res.status === 200) {
+            const success = await login({ email, password, rememberMe });
+            if (success) {
                 router.push("/");
             }
-        } catch (err: any) {
-            setError(err.response?.data?.message || "Login failed");
-        }
+        } catch (err: any) {}
     };
 
     return (

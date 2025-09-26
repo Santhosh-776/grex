@@ -1,4 +1,4 @@
-import jwt from "jsonwebtoken";
+import { SignJWT } from "jose";
 
 type JwtPayload = {
     id: string;
@@ -6,10 +6,13 @@ type JwtPayload = {
     rememberMe?: boolean;
 };
 
-const secretKey = process.env.SECRET_KEY as string;
+const secretKey = new TextEncoder().encode(process.env.JWT_SECRET);
 
-export const createAuthToken = (payload: JwtPayload): string => {
-    return jwt.sign(payload, secretKey, {
-        expiresIn: payload.rememberMe ? "7d" : "1d",
-    });
+export const createAuthToken = async (payload: JwtPayload): Promise<string> => {
+    const jwt = await new SignJWT(payload)
+        .setProtectedHeader({ alg: "HS256" })
+        .setIssuedAt()
+        .setExpirationTime(payload.rememberMe ? "7d" : "1d")
+        .sign(secretKey);
+    return jwt;
 };
