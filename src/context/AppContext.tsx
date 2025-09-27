@@ -1,25 +1,17 @@
 "use client";
 
 import { useContext, createContext, useState, useEffect } from "react";
+import { User } from "@/types/index";
 import { LoginData, UserData } from "@/types/auth";
 import axios from "axios";
+import { AppContextType, Notification } from "@/types";
 
-interface AppContextProps {
-    user: UserData | null;
-    isLoading: boolean;
-    isAuthenticated: boolean;
-    error: string | null;
-    login: (credentials: LoginData) => Promise<boolean>;
-    logout: () => Promise<void>;
-    checkUser: () => Promise<void>;
-}
-
-const AppContext = createContext<AppContextProps | undefined>(undefined);
+const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     children,
 }) => {
-    const [user, setUser] = useState<UserData | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
@@ -28,13 +20,18 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
         setError(null);
         try {
             console.log("Checking user");
-            const response = await axios.get("/api/auth/user");
-            if (response) console.log("User check response:", response);
+            const response = await axios.get("/api/auth/user", {
+                withCredentials: true,
+            });
             setUser(response.data.user || null);
         } catch (err: any) {
-            console.error("Auth check failed:", err);
-            setUser(null);
-            setError(err.message);
+            if (err.response?.status === 401) {
+                setUser(null);
+                setError(null);
+            } else {
+                console.error("Auth check failed:", err);
+                setError(err.message);
+            }
         } finally {
             setIsLoading(false);
         }
@@ -77,17 +74,26 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
             setIsLoading(false);
         }
     };
-
-    // Optional: auto-check user on mount
+    const notifications: Notification[] = [
+        {
+            id: "1",
+            type: "MEETING_REMINDER",
+            content: "Weekly Standup in 10 minutes",
+            createdAt: "2024-12-20T09:50:00Z",
+            isRead: false,
+            teamId: "team-1",
+        },
+    ];
     useEffect(() => {
         checkUser();
     }, []);
 
-    const value: AppContextProps = {
+    const value: AppContextType = {
         user,
         isLoading,
         isAuthenticated: !!user,
         error,
+        notifications,
         login,
         logout,
         checkUser,
@@ -96,7 +102,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
     return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
 
-export const useAppContext = (): AppContextProps => {
+export const useAppContext = (): AppContextType => {
     const context = useContext(AppContext);
     if (!context)
         throw new Error("useAppContext must be used within an AppProvider");

@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { CreateUserData, LoginData } from "@/types/auth";
-import { findUserByEmail, findUserById, getUserRoles } from "./userServices";
+import { findUserByEmail, getUserRoles } from "./userServices";
 import { verifyPassword } from "@/utils/hash";
 import { createAuthToken } from "@/utils/jwt";
 

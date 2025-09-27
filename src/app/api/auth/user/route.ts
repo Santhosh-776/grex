@@ -15,6 +15,7 @@ export async function GET(request: NextRequest) {
 
     try {
         const decoded = jwt.verify(authToken, process.env.JWT_SECRET!) as any;
+
         if (!decoded?.id) {
             const res = NextResponse.json(
                 { message: "Invalid auth token" },

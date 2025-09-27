@@ -31,7 +31,7 @@ export async function POST(request: NextRequest) {
         const user = await findUserByEmail(data.email);
         if (!user) {
             return NextResponse.json(
-                { message: "User not found" },
+                { message: "Invalid email or password" },
                 { status: 401 }
             );
         }
@@ -64,8 +64,8 @@ export async function POST(request: NextRequest) {
         );
         response.cookies.set("auth-token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            secure: false /*process.env.NODE_ENV === "production"*/,
+            sameSite: "lax",
             maxAge: data.rememberMe ? 7 * 24 * 60 * 60 : 24 * 60 * 60,
             path: "/",
         });

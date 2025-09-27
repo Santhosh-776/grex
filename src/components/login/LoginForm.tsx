@@ -21,7 +21,7 @@ const LoginForm = () => {
         try {
             const success = await login({ email, password, rememberMe });
             if (success) {
-                router.push("/");
+                router.push("/dashboard");
             }
         } catch (err: any) {}
     };

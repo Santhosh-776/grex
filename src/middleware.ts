@@ -13,8 +13,6 @@ export async function middleware(request: NextRequest) {
         pathname.startsWith(route)
     );
     const isAuthRoute = authRoutes.some((route) => pathname.startsWith(route));
-    const isPublicRoute = publicRoutes.includes(pathname);
-
     let isAuthenticated = false;
     let tokenInvalid = false;
 
