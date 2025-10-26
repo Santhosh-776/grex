@@ -1,3 +1,4 @@
+import { LoginData } from "./auth";
 // User matches Prisma User model
 export interface User {
     id: string;
@@ -73,10 +74,4 @@ export interface AppContextType {
     login: (credentials: LoginData) => Promise<boolean>;
     logout: () => Promise<void>;
     checkUser: () => Promise<void>;
-}
-
-// Example login type
-export interface LoginData {
-    email: string;
-    password: string;
 }

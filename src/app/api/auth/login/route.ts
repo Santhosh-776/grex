@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
             data.password,
             user.hashedPassword
         );
-        if (!isValidPassword) {
+        if (!isValidPassword.success) {
             return NextResponse.json(
                 { message: "Invalid email or password" },
                 { status: 401 }

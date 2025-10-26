@@ -1,17 +1,8 @@
+"use client";
+
 import { quickActions } from "@/constants/dashboard";
 import Link from "next/link";
-import {
-    Bell,
-    Users,
-    Calendar,
-    FileText,
-    Sticker as Sticky,
-    CheckSquare,
-    LogOut,
-    Search,
-    Clock,
-    ArrowRight,
-} from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 const QuickActions = () => {
     return (

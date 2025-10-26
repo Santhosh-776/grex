@@ -1,16 +1,14 @@
-// src/app/(landing)/layout.tsx (Landing page layout)
-import React from "react";
-import LandingHeader from "./components/Header";
-
-export default function LandingLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    return (
-        <div>
-            <LandingHeader />
-            <main>{children}</main>
-        </div>
-    );
-}
+// // src/app/(landing)/layout.tsx (Landing page layout)
+// import React from "react";
+// import Header from "./components/Header";
+// export default function LandingLayout({
+//     children,
+// }: {
+//     children: React.ReactNode;
+// }) {
+//     return (
+//         <div>
+//             <main>{children}</main>
+//         </div>
+//     );
+// }

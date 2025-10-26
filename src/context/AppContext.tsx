@@ -54,7 +54,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
             return false;
         } catch (err: any) {
             console.error("Login failed:", err);
-            setError(err.message);
+            setError(err.response?.data?.message || err.message);
             return false;
         } finally {
             setIsLoading(false);
@@ -68,7 +68,6 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({
             await axios.post("/api/auth/logout", {}, { withCredentials: true });
             setUser(null);
         } catch (err: any) {
-            console.error("Logout failed:", err);
             setError(err.message);
         } finally {
             setIsLoading(false);

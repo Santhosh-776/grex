@@ -33,6 +33,7 @@ model User {
 model Team {
   id           String         @id @default(uuid())
   name         String         @unique
+  description  String?        @db.Text
   createdBy    User           @relation("CreatedTeams", fields: [userId], references: [id])
   userId       String
   createdAt    DateTime       @default(now())

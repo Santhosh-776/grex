@@ -1,4 +1,5 @@
-import Hero from "./components/Hero";
+import Header from "../../components/landing/Header";
+import Hero from "../../components/landing/Hero";
 
 const LandingPage: React.FC = () => {
     return (
