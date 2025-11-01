@@ -2,20 +2,21 @@
 
 import React, { useState } from "react";
 import { Search, Bell, User, ChevronDown } from "lucide-react";
-import { useAppContext } from "@/context/AppContext";
 import NotificationDropdown from "./NotificationDropdown";
 import { useRouter } from "next/navigation";
+import { logout } from "@/services/authServices";
+import { useUserStore } from "@/store/useUserStore";
 
 const TopBar: React.FC = () => {
-    const { user, notifications, logout } = useAppContext();
     const [showNotifications, setShowNotifications] = useState(false);
     const [showProfile, setShowProfile] = useState(false);
-    const unreadCount = notifications.filter((n) => !n.read).length;
     const router = useRouter();
+    const clearUser = useUserStore((state) => state.clearUser);
 
-    const handleLogout = () => {
-        logout();
-        router.replace("/"); // redirect to home
+    const handleLogout = async () => {
+        await logout();
+        clearUser();
+        router.push("/");
     };
 
     return (
@@ -41,11 +42,11 @@ const TopBar: React.FC = () => {
                             }
                             className="relative p-2 rounded-lg transition-all duration-200 hover:scale-105 hover:bg-gray-100">
                             <Bell className="w-5 h-5 text-gray-600" />
-                            {unreadCount > 0 && (
+                            {/* {unreadCount > 0 && (
                                 <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                                     {unreadCount}
                                 </span>
-                            )}
+                            )} */}
                         </button>
 
                         {showNotifications && (
@@ -60,7 +61,7 @@ const TopBar: React.FC = () => {
                         <button
                             onClick={() => setShowProfile(!showProfile)}
                             className="flex items-center gap-2 p-2 rounded-lg transition-all duration-200 hover:scale-105 hover:bg-gray-100">
-                            {user?.avatar ? (
+                            {/* {user?.avatar ? (
                                 <img
                                     src={user.avatar}
                                     alt={user.name}
@@ -68,19 +69,19 @@ const TopBar: React.FC = () => {
                                 />
                             ) : (
                                 <User className="w-8 h-8 p-1 rounded-full bg-gray-200 text-gray-600" />
-                            )}
+                            )} */}
                             <ChevronDown className="w-4 h-4 text-gray-600" />
                         </button>
 
                         {showProfile && (
                             <div className="absolute right-0 top-12 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2">
                                 <div className="px-4 py-2 border-b border-gray-200">
-                                    <div className="font-medium">
+                                    {/* <div className="font-medium">
                                         {user?.name}
                                     </div>
                                     <div className="text-sm text-gray-500">
                                         {user?.email}
-                                    </div>
+                                    </div> */}
                                 </div>
                                 <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors">
                                     Profile Settings

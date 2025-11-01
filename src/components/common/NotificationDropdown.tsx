@@ -2,7 +2,6 @@
 
 import React from "react";
 import { Calendar, FileText, Users, CheckSquare, X } from "lucide-react";
-import { useAppContext } from "@/context/AppContext";
 
 interface NotificationDropdownProps {
     onClose: () => void;
@@ -11,8 +10,33 @@ interface NotificationDropdownProps {
 const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
     onClose,
 }) => {
-    const { notifications } = useAppContext();
-
+    const notifications = [
+        {
+            id: "1",
+            type: "meeting",
+            title: "Team Meeting at 3 PM",
+            message: "Don't forget about the team meeting scheduled for today.",
+            timestamp: "2024-06-15T14:00:00Z",
+            read: false,
+        },
+        {
+            id: "2",
+            type: "task",
+            title: "Task Assigned: Update Documentation",
+            message:
+                "You have been assigned a new task to update the project documentation.",
+            timestamp: "2024-06-14T10:30:00Z",
+            read: true,
+        },
+        {
+            id: "3",
+            type: "file",
+            title: "New File Uploaded",
+            message: "A new file has been uploaded to the project repository.",
+            timestamp: "2024-06-13T09:15:00Z",
+            read: true,
+        },
+    ];
     const getIcon = (type: string) => {
         switch (type) {
             case "meeting":

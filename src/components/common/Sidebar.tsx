@@ -3,7 +3,6 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
-import { useAppContext } from "@/context/AppContext";
 
 import {
     Home,
@@ -14,11 +13,15 @@ import {
     CheckSquare,
     LogOut,
 } from "lucide-react";
+
+import { logout } from "@/services/authServices";
+import { useUserStore } from "@/store/useUserStore";
+
 const Sidebar: React.FC = () => {
     const pathname = usePathname();
     const router = useRouter();
+    const clearUser = useUserStore((state) => state.clearUser);
 
-    const { logout } = useAppContext();
     const menuItems = [
         { icon: Home, label: "Dashboard", path: "/dashboard" },
         { icon: Users, label: "Teams", path: "/teams" },
@@ -27,6 +30,12 @@ const Sidebar: React.FC = () => {
         { icon: Sticky, label: "Notes", path: "/notes" },
         { icon: CheckSquare, label: "Tasks", path: "/tasks" },
     ];
+
+    const handleLogout = async () => {
+        await logout();
+        clearUser();
+        router.replace("/");
+    };
 
     return (
         <div
@@ -74,10 +83,7 @@ const Sidebar: React.FC = () => {
                            text-gray-700 hover:bg-gray-100
 
                     `}
-                    onClick={() => {
-                        logout();
-                        router.replace("/");
-                    }}>
+                    onClick={() => handleLogout()}>
                     <LogOut className="w-5 h-5" />
                     <span className="font-medium">Sign Out</span>
                 </button>

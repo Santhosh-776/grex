@@ -63,15 +63,3 @@ export interface Notification {
     meetingId?: string;
     taskId?: string;
 }
-
-// Context type for app state
-export interface AppContextType {
-    user: User | null;
-    isLoading: boolean;
-    isAuthenticated: boolean;
-    error: string | null;
-    notifications: Notification[];
-    login: (credentials: LoginData) => Promise<boolean>;
-    logout: () => Promise<void>;
-    checkUser: () => Promise<void>;
-}

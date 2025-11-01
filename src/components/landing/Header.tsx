@@ -1,13 +1,34 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { User, Users } from "lucide-react";
 import { useRouter } from "next/navigation";
+import axios from "axios";
+import { useUserStore } from "@/store/useUserStore";
 
-import { useAppContext } from "@/context/AppContext";
 const Header: React.FC = () => {
+    const [loading, setLoading] = useState(true);
+
     const router = useRouter();
-    const { user } = useAppContext();
+    const setUser = useUserStore((state) => state.setUser);
+    const user = useUserStore((state) => state.user);
+    const clearUser = useUserStore((state) => state.clearUser);
+
+    useEffect(() => {
+        const checkUser = async () => {
+            try {
+                const response = await axios.get("/api/auth/user", {
+                    withCredentials: true,
+                });
+                setUser(response.data.user);
+            } catch (err) {
+                clearUser();
+            } finally {
+                setLoading(false);
+            }
+        };
+        checkUser();
+    }, []);
     return (
         <header className="py-4 px-60  bg-gray-50 shadow-sm w-full flex justify-between items-center text-2xl">
             <div className="flex items-center space-x-4">
@@ -21,15 +42,14 @@ const Header: React.FC = () => {
                 </span>
             </div>
             <div className="flex space-x-2 items-center text-base font-bold">
-                {!user ? (
-                    <span className="bg-blue-600 text-amber-50 py-2 px-4 rounded-md cursor-pointer hover:bg-blue-700 transition-all duration-200">
-                        <button
-                            onClick={() => {
-                                router.push("/login");
-                            }}>
-                            Login
-                        </button>
-                    </span>
+                {loading ? null : !user ? (
+                    <button
+                        onClick={() => {
+                            router.push("/login");
+                        }}
+                        className="bg-blue-600 text-amber-50 py-2 px-4 rounded-md cursor-pointer hover:bg-blue-700 transition-all duration-200">
+                        Login
+                    </button>
                 ) : (
                     <span
                         className="text-primary font-medium flex items-center
