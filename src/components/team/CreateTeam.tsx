@@ -26,20 +26,17 @@ const CreateTeam: React.FC<Props> = ({ onSuccess }) => {
         setLoading(true);
 
         try {
-            // ✅ Create the payload with user.id directly
             const teamPayload = {
                 name: team.name,
                 description: team.description,
-                createdBy: user.id, // Use user.id directly
+                createdBy: user.id,
             };
 
             console.log("Creating team with payload:", teamPayload);
 
-            const response = await axios.post(
-                "/api/teams/new",
-                teamPayload, // Send the payload directly, not wrapped in { team }
-                { withCredentials: true }
-            );
+            const response = await axios.post("/api/teams/new", teamPayload, {
+                withCredentials: true,
+            });
 
             setMessage("✅ Team created successfully!");
             setTeam({ name: "", description: "" });

@@ -12,4 +12,4 @@ export const prisma =
         },
     });
 
-if (process.env.NODE_ENV !== "development") globalForPrisma.prisma = prisma;
+if (process.env.NODE_ENV === "development") globalForPrisma.prisma = prisma;

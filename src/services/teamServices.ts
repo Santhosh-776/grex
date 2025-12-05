@@ -1,18 +1,16 @@
 import { prisma } from "@/lib/prisma";
+import { findUserById } from "./userServices";
 
 export interface Team {
     name: string;
     description?: string;
-    createdBy: string; // This should be the user ID
+    createdBy: string;
 }
 
 export const createTeam = async (teamData: Team) => {
     console.log("Creating team with data:", teamData);
 
-    // Validate that createdBy is a valid user ID
-    const user = await prisma.user.findUnique({
-        where: { id: teamData.createdBy },
-    });
+    const user = await findUserById(teamData.createdBy);
 
     if (!user) {
         throw new Error(`User with ID ${teamData.createdBy} not found`);
@@ -26,12 +24,19 @@ export const createTeam = async (teamData: Team) => {
                 connect: { id: teamData.createdBy },
             },
             members: {
-                connect: { id: teamData.createdBy }, // Add creator as a member
+                create: {
+                    user: { connect: { id: teamData.createdBy } },
+                    role: "ADMIN",
+                },
             },
         },
         include: {
             createdBy: true,
-            members: true,
+            members: {
+                include: {
+                    user: true,
+                },
+            },
         },
     });
 

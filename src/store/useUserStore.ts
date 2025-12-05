@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { UserData } from "@/types/auth";
 
 interface UserStore {
@@ -7,8 +8,15 @@ interface UserStore {
     clearUser: () => void;
 }
 
-export const useUserStore = create<UserStore>((set) => ({
-    user: null,
-    setUser: (user) => set({ user }),
-    clearUser: () => set({ user: null }),
-}));
+export const useUserStore = create<UserStore>()(
+    persist(
+        (set) => ({
+            user: null,
+            setUser: (user) => set({ user }),
+            clearUser: () => set({ user: null }),
+        }),
+        {
+            name: "grex-user",
+        }
+    )
+);

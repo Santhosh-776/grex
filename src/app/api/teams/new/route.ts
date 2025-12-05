@@ -7,7 +7,6 @@ export async function POST(request: NextRequest) {
 
         console.log("Received team data:", teamData);
 
-        // Validate required fields
         if (!teamData.name || !teamData.createdBy) {
             return NextResponse.json(
                 { error: "Name and createdBy are required" },
