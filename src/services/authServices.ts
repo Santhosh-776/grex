@@ -1,8 +1,9 @@
 import { prisma } from "@/lib/prisma";
 import { CreateUserData, LoginData } from "@/types/auth";
-import { findUserByEmail, findUserById, getUserRoles } from "./userServices";
+import { findUserByEmail, getUserRoles } from "./userServices";
 import { verifyPassword } from "@/utils/hash";
 import { createAuthToken } from "@/utils/jwt";
+import axios from "axios";
 
 export const createUser = async (userData: CreateUserData) => {
     try {
@@ -65,4 +66,13 @@ export const authenticateUser = async (data: LoginData) => {
         console.error("Error authenticating user:", error);
         return null;
     }
+};
+
+export const logout = async () => {
+    const res = await axios.post(
+        "/api/auth/logout",
+        {},
+        { withCredentials: true }
+    );
+    return res.data;
 };

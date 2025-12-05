@@ -19,7 +19,7 @@ export interface UserData {
     id: string;
     name: string;
     email: string;
-    profileImage: string | null;
+    profileImage?: string | null;
     createdAt: Date;
 }
 roles: {
