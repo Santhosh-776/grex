@@ -1,35 +1,18 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useUserStore } from "@/store/useUserStore";
 
 type Props = { onSuccess?: () => void };
 
 const CreateTeam: React.FC<Props> = ({ onSuccess }) => {
-    const [user, setUser] = useState<{
-        id: string;
-        name: string;
-        email: string;
-    } | null>(null);
+    const user = useUserStore((state) => state.user);
     const [team, setTeam] = useState({
         name: "",
         description: "",
     });
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState("");
-
-    useEffect(() => {
-        const checkUser = async () => {
-            try {
-                const response = await axios.get("/api/auth/user", {
-                    withCredentials: true,
-                });
-                setUser(response.data.user || null);
-            } catch (err) {
-                setUser(null);
-            }
-        };
-        checkUser();
-    }, []);
 
     if (!user) {
         return (

@@ -7,7 +7,7 @@ const AppLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <Sidebar />
             <div className="flex flex-col flex-1 ">
                 <Topbar />
-                <main className="flex-1 p-4 ml-64 py-4 ">{children}</main>
+                <main className="flex-1 p-4 py-4 ">{children}</main>
             </div>
         </div>
     );
