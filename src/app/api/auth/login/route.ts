@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-
 import { z } from "zod";
 
 import { verifyPassword } from "@/utils/hash";
@@ -32,7 +31,7 @@ export async function POST(request: NextRequest) {
         const user = await findUserByEmail(data.email);
         if (!user) {
             return NextResponse.json(
-                { message: "User not found" },
+                { message: "Invalid email or password" },
                 { status: 401 }
             );
         }
@@ -41,7 +40,7 @@ export async function POST(request: NextRequest) {
             data.password,
             user.hashedPassword
         );
-        if (!isValidPassword) {
+        if (!isValidPassword.success) {
             return NextResponse.json(
                 { message: "Invalid email or password" },
                 { status: 401 }
@@ -52,15 +51,21 @@ export async function POST(request: NextRequest) {
             email: user.email,
             rememberMe: data.rememberMe || false,
         };
-        const token = createAuthToken(tokenPayload);
+        const token = await createAuthToken(tokenPayload);
         const response = NextResponse.json(
-            { message: "Login successful" },
+            {
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    profile: user.profileImage,
+                },
+            },
             { status: 200 }
         );
-        response.cookies.set("authToken", token, {
+        response.cookies.set("auth-token", token, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
+            secure: false /*process.env.NODE_ENV === "production"*/,
+            sameSite: "lax",
             maxAge: data.rememberMe ? 7 * 24 * 60 * 60 : 24 * 60 * 60,
             path: "/",
         });
