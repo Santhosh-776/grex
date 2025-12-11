@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 import axios from "axios";
@@ -13,7 +13,17 @@ const LoginForm = () => {
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [redirectTo, setRedirectTo] = useState("/dashboard");
+
     const setUser = useUserStore((state) => state.setUser);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const params = new URLSearchParams(window.location.search);
+            const redir = params.get("redirectTo");
+            if (redir) setRedirectTo(redir);
+        }
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,20 +37,19 @@ const LoginForm = () => {
 
         try {
             const response = await axios.post(
-                "/api/auth/login",
-                {
-                    email,
-                    password,
-                    rememberMe,
-                },
-                {
-                    withCredentials: true,
-                }
+                `/api/auth/login?redirectTo=${encodeURIComponent(redirectTo)}`,
+                { email, password, rememberMe },
+                { withCredentials: true }
             );
 
             if (response.data.user) {
                 setUser(response.data.user);
-                router.push("/dashboard");
+
+                if (response.data.redirect?.url) {
+                    router.push(response.data.redirect.url);
+                } else {
+                    router.push(redirectTo);
+                }
             }
         } catch (err: any) {
             setError(

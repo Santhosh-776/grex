@@ -12,11 +12,21 @@ export interface User {
 export interface Team {
     id: string;
     name: string;
+    description: string;
     createdAt: string;
     createdBy: User;
-    members: User[];
+    members: TeamMember[];
     meetings?: Meeting[];
     tasks?: Task[];
+}
+
+export interface TeamMember {
+    id: string;
+    userId: string;
+    teamId: string;
+    role: "OWNER" | "ADMIN" | "MEMBER" | "VIEWER";
+    joinedAt: string; // or Date if you convert it
+    user: User; // Nested user object included via Prisma include
 }
 
 // Meeting matches Prisma Meeting model

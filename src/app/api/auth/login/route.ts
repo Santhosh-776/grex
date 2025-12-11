@@ -14,6 +14,9 @@ const loginSchema = z.object({
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
+        const redirectTo =
+            request.nextUrl.searchParams.get("redirectTo") || "/dashboard";
+        const absoluteRedirectUrl = new URL(redirectTo, request.url);
 
         const parseResult = loginSchema.safeParse(body);
         if (!parseResult.success) {
@@ -59,6 +62,9 @@ export async function POST(request: NextRequest) {
                     email: user.email,
                     profile: user.profileImage,
                 },
+                redirect: {
+                    url: absoluteRedirectUrl,
+                },
             },
             { status: 200 }
         );
@@ -69,6 +75,7 @@ export async function POST(request: NextRequest) {
             maxAge: data.rememberMe ? 7 * 24 * 60 * 60 : 24 * 60 * 60,
             path: "/",
         });
+        console.log("url in route", absoluteRedirectUrl);
         return response;
     } catch (error) {
         console.error("Login route error:", error);

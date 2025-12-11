@@ -1,12 +1,15 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useUserStore } from "@/store/useUserStore";
+import { useTeamStore } from "@/store/useTeamStore";
 
 type Props = { onSuccess?: () => void };
 
 const CreateTeam: React.FC<Props> = ({ onSuccess }) => {
     const user = useUserStore((state) => state.user);
+    const addTeam = useTeamStore((state) => state.addTeam);
+    const teams = useTeamStore((state) => state.teams);
     const [team, setTeam] = useState({
         name: "",
         description: "",
@@ -38,13 +41,15 @@ const CreateTeam: React.FC<Props> = ({ onSuccess }) => {
                 withCredentials: true,
             });
 
-            setMessage("✅ Team created successfully!");
+            setMessage("Team created successfully!");
             setTeam({ name: "", description: "" });
-
+            console.log("Team creation response:", response.data);
+            addTeam(response.data.team);
+            console.log("teams after addition:", teams);
             if (onSuccess) onSuccess();
         } catch (error) {
             console.error("Team creation error:", error);
-            setMessage("❌ Failed to create team.");
+            setMessage("Failed to create team.");
         } finally {
             setLoading(false);
         }
