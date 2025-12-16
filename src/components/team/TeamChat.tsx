@@ -48,7 +48,7 @@ const TeamChat: React.FC<TeamChatProps> = ({ team }) => {
             </h3>
 
             {/* Chat Messages */}
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-4 mb-4 overflow-y-auto bg-gray-50 dark:bg-gray-900/50">
+            <div className="border border-gray-200 dark:border-secondary rounded-lg p-4 mb-4 overflow-y-auto bg-gray-50 dark:bg-gray-900/50">
                 {chatMessages.length === 0 ? (
                     <div className="h-full flex items-center justify-center text-center text-gray-500 dark:text-gray-400">
                         No messages yet. Start the conversation!
@@ -71,7 +71,7 @@ const TeamChat: React.FC<TeamChatProps> = ({ team }) => {
                                             {msg.timestamp}
                                         </span>
                                     </div>
-                                    <p className="text-gray-700 dark:text-gray-300 break-words">
+                                    <p className="text-secondary dark:text-gray-300 break-words">
                                         {msg.message}
                                     </p>
                                 </div>
@@ -89,7 +89,7 @@ const TeamChat: React.FC<TeamChatProps> = ({ team }) => {
                     value={chatMessage}
                     onChange={(e) => setChatMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
-                    className="flex-1 px-3 py-2 border bg-white dark:bg-gray-900 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"
+                    className="flex-1 px-3 py-2 border bg-white dark:bg-gray-900 border-gray-300 dark:border-secondary text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600 dark:focus:ring-blue-500 focus:border-transparent"
                 />
                 <button
                     onClick={handleSendMessage}

@@ -3,7 +3,7 @@
 import TeamChat from "@/components/team/TeamChat";
 import TeamDetails from "@/components/team/TeamDetails";
 import { useTeamStore } from "@/store/useTeamStore";
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 
 const TeamDetailsPage = ({
     params,

@@ -72,7 +72,7 @@ const LoginForm = () => {
                 onSubmit={handleSubmit}
                 className="space-y-6">
                 <div>
-                    <label className="block text-sm font-medium mb-2 text-gray-700">
+                    <label className="block text-sm font-medium mb-2 text-secondary">
                         Email Address
                     </label>
                     <div className="relative">
@@ -88,7 +88,7 @@ const LoginForm = () => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2 text-gray-700">
+                    <label className="block text-sm font-medium mb-2 text-secondary">
                         Password
                     </label>
                     <div className="relative">
@@ -103,7 +103,7 @@ const LoginForm = () => {
                         <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors">
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-secondary transition-colors">
                             {showPassword ? (
                                 <EyeOff className="w-5 h-5" />
                             ) : (
@@ -148,7 +148,7 @@ const LoginForm = () => {
             </form>
 
             <div className="mt-6 text-center text-sm">
-                <p className="text-gray-600">
+                <p className="text-secondary">
                     Don't have an account?{" "}
                     <a
                         href="/signup"

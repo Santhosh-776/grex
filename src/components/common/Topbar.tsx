@@ -41,7 +41,7 @@ const TopBar: React.FC = () => {
                                 setShowNotifications(!showNotifications)
                             }
                             className="relative p-2 rounded-lg transition-all duration-200 hover:scale-105 hover:bg-gray-100">
-                            <Bell className="w-5 h-5 text-gray-600" />
+                            <Bell className="w-5 h-5 text-secondary" />
                             {/* {unreadCount > 0 && (
                                 <span className="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                                     {unreadCount}
@@ -68,9 +68,9 @@ const TopBar: React.FC = () => {
                                     className="w-8 h-8 rounded-full"
                                 />
                             ) : (
-                                <User className="w-8 h-8 p-1 rounded-full bg-gray-200 text-gray-600" />
+                                <User className="w-8 h-8 p-1 rounded-full bg-gray-200 text-secondary" />
                             )} */}
-                            <ChevronDown className="w-4 h-4 text-gray-600" />
+                            <ChevronDown className="w-4 h-4 text-secondary" />
                         </button>
 
                         {showProfile && (
@@ -83,12 +83,12 @@ const TopBar: React.FC = () => {
                                         {user?.email}
                                     </div> */}
                                 </div>
-                                <button className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors">
+                                <button className="w-full text-left px-4 py-2 text-secondary hover:bg-gray-100 transition-colors">
                                     Profile Settings
                                 </button>
                                 <button
                                     onClick={handleLogout}
-                                    className="w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100 transition-colors">
+                                    className="w-full text-left px-4 py-2 text-secondary hover:bg-gray-100 transition-colors">
                                     Sign Out
                                 </button>
                             </div>

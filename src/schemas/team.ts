@@ -5,8 +5,9 @@ export const teamRequestSchema = z
         teamId: z.uuid().optional(),
         token: z.string().optional(),
         userId: z.uuid().optional(),
+        memberId: z.uuid().optional(),
     })
     .refine(
-        (data) => data.teamId || data.token,
+        (data) => data.teamId || data.token || data.memberId,
         "Either teamId or token must be provided."
     );

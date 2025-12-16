@@ -112,3 +112,13 @@ export const AcceptInviteLink = async (token: string, userId: string) => {
         return { success: false, error: "Something went wrong" };
     }
 };
+
+export const deleteMember = async (memberId: string) => {
+    await prisma.teamMember.delete({
+        where: {
+            id: memberId,
+        },
+    });
+
+    return { message: "Member removed successfully" };
+};

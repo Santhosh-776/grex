@@ -38,7 +38,7 @@ const TaskOverview = () => {
                                 <span
                                     className={`text-xs px-2 py-1 rounded-full ${
                                         task.status === "todo"
-                                            ? "bg-gray-100 text-gray-700"
+                                            ? "bg-gray-100 text-secondary"
                                             : task.status === "in-progress"
                                             ? "bg-blue-100 text-blue-700"
                                             : task.status === "review"
@@ -61,7 +61,7 @@ const TaskOverview = () => {
                         <div className="flex items-start gap-3">
                             <div className="w-2 h-2 bg-blue-500 rounded-full mt-2"></div>
                             <div>
-                                <p className="text-sm text-gray-700">
+                                <p className="text-sm text-secondary">
                                     John created a new task
                                 </p>
                                 <span className="text-xs text-gray-500">
@@ -72,7 +72,7 @@ const TaskOverview = () => {
                         <div className="flex items-start gap-3">
                             <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                             <div>
-                                <p className="text-sm text-gray-700">
+                                <p className="text-sm text-secondary">
                                     Meeting "Weekly Standup" started
                                 </p>
                                 <span className="text-xs text-gray-500">
@@ -83,7 +83,7 @@ const TaskOverview = () => {
                         <div className="flex items-start gap-3">
                             <div className="w-2 h-2 bg-purple-500 rounded-full mt-2"></div>
                             <div>
-                                <p className="text-sm text-gray-700">
+                                <p className="text-sm text-secondary">
                                     New file uploaded to Design Team
                                 </p>
                                 <span className="text-xs text-gray-500">

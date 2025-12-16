@@ -41,7 +41,7 @@ const AcceptPage = ({
                 <h1 className="text-2xl font-semibold mb-4 text-gray-900 dark:text-gray-100">
                     Join Team
                 </h1>
-                <p className="text-gray-700 dark:text-gray-300 mb-6">
+                <p className="text-secondary dark:text-gray-300 mb-6">
                     Click the button below to accept the invitation and join the
                     team.
                 </p>

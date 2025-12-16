@@ -30,7 +30,7 @@ const Home: React.FC = () => {
 
                         <p
                             className={`text-xl md:text-2xl mb-8 max-w-3xl mx-auto ${
-                                darkMode ? "text-gray-300" : "text-gray-600"
+                                darkMode ? "text-gray-300" : "text-secondary"
                             }`}>
                             Seamlessly connect your team with integrated
                             meetings, task management, file sharing, and
@@ -48,8 +48,8 @@ const Home: React.FC = () => {
                             <button
                                 className={`flex items-center gap-2 px-8 py-4 rounded-lg border-2 transition-all duration-200 hover:scale-105 ${
                                     darkMode
-                                        ? "border-gray-700 text-gray-300 hover:bg-gray-800"
-                                        : "border-gray-300 text-gray-700 hover:bg-gray-50"
+                                        ? "border-secondary text-gray-300 hover:bg-gray-800"
+                                        : "border-gray-300 text-secondary hover:bg-gray-50"
                                 }`}>
                                 <Play className="w-5 h-5" />
                                 <span>Watch Demo</span>
@@ -71,7 +71,7 @@ const Home: React.FC = () => {
                         </h2>
                         <p
                             className={`text-lg ${
-                                darkMode ? "text-gray-400" : "text-gray-600"
+                                darkMode ? "text-gray-400" : "text-secondary"
                             }`}>
                             Powerful tools to streamline your team's workflow
                         </p>
@@ -109,7 +109,7 @@ const Home: React.FC = () => {
                                             className={`${
                                                 darkMode
                                                     ? "text-gray-400"
-                                                    : "text-gray-600"
+                                                    : "text-secondary"
                                             } leading-relaxed`}>
                                             {feature.description}
                                         </p>
@@ -141,7 +141,7 @@ const Home: React.FC = () => {
                     </h2>
                     <p
                         className={`text-lg mb-8 ${
-                            darkMode ? "text-gray-300" : "text-gray-600"
+                            darkMode ? "text-gray-300" : "text-secondary"
                         }`}>
                         Join thousands of teams already using TeamFlow to
                         collaborate more effectively.

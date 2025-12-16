@@ -19,7 +19,9 @@ const CreateTeam: React.FC<Props> = ({ onSuccess }) => {
 
     if (!user) {
         return (
-            <div className="text-gray-600">Please log in to create a team.</div>
+            <div className="text-secondary">
+                Please log in to create a team.
+            </div>
         );
     }
 

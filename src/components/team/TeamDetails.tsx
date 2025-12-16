@@ -12,6 +12,8 @@ import {
 import { Team } from "@/types";
 import ShareLinkModal from "./ShareLinkModal";
 import axios from "axios";
+import { memberOptions } from "@/constants/teams";
+import { useTeamStore } from "@/store/useTeamStore";
 
 interface TeamDetailsProps {
     team: Team;
@@ -24,9 +26,10 @@ const TeamDetails: React.FC<TeamDetailsProps> = ({
     viewChat,
     OnViewChat,
 }) => {
-    const [showRoleModal, setShowRoleModal] = useState(false);
+    const [openManage, setOpenManage] = useState(false);
     const [inviteUrl, setInviteUrl] = useState<string | null>(null);
     const [dialogOpen, setDialogOpen] = useState(false);
+    const { removeMember } = useTeamStore();
 
     const teamId = team.id;
 
@@ -50,6 +53,35 @@ const TeamDetails: React.FC<TeamDetailsProps> = ({
         generateInviteLink();
         setDialogOpen(!dialogOpen);
     };
+
+    const handleMember =
+        (action: string, member: any, teamId: string) => async () => {
+            try {
+                if (action.includes("remove")) {
+                    const response = await axios.delete(
+                        `/api/teams/${teamId}/members/${member.id}/delete`
+                    );
+                    console.log("Remove member response:", member.id, teamId);
+                    removeMember(teamId, member.id);
+                    if (response.data.success) {
+                        console.log("Member removed:", response.data);
+                    } else {
+                        console.error(
+                            "Error removing member:",
+                            response.data.data
+                        );
+                    }
+                } else if (action.includes("role")) {
+                    // Handle role assignment logic here
+                    console.log("Assign role to member:", member.id);
+                } else {
+                    // Handle view profile logic here
+                    console.log("View profile of user:", member.user.id);
+                }
+            } catch (error) {
+                console.error("Error handling member action:", error);
+            }
+        };
     return (
         <>
             <div className="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
@@ -59,7 +91,7 @@ const TeamDetails: React.FC<TeamDetailsProps> = ({
                             {team.name}
                         </h2>
                         {team.description && (
-                            <p className="text-gray-600 dark:text-gray-400">
+                            <p className="text-secondary dark:text-gray-400">
                                 {team.description}
                             </p>
                         )}
@@ -71,14 +103,13 @@ const TeamDetails: React.FC<TeamDetailsProps> = ({
                             <Share2 />
                             <span>Share Invite Link</span>
                         </button>
-
                         <button className="text-secondary flex gap-2 items-center border border-secondary/50 px-3 py-1 rounded-lg hover:bg-secondary/20 transition-colors cursor-pointer">
                             <PlusSquare />
                             Add Members
                         </button>
                         <button
-                            onClick={() => setShowRoleModal(true)}
-                            className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">
+                            onClick={() => setOpenManage(true)}
+                            className="p-2 rounded-lg transition-colors hover:bg-gray-100 dark:hover:bg-secondary cursor-pointer">
                             <Settings className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                         </button>
                     </div>
@@ -93,7 +124,8 @@ const TeamDetails: React.FC<TeamDetailsProps> = ({
                             team.members.map((member) => (
                                 <div
                                     key={member.id}
-                                    className="flex items-center justify-between p-3 border border-gray-200 dark:border-gray-700 rounded-lg">
+                                    className="flex items-center justify-between p-3 
+                                        border border-gray-200 dark:border-secondary rounded-lg">
                                     <div className="flex items-center gap-3">
                                         {member.user?.profileImage ? (
                                             <img
@@ -123,14 +155,33 @@ const TeamDetails: React.FC<TeamDetailsProps> = ({
                                                 ? "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300"
                                                 : member.user.role === "member"
                                                 ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300"
-                                                : "bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300"
+                                                : "bg-gray-100 dark:bg-secondary text-secondary dark:text-gray-300"
                                         }`}>
                                         {member.role}
                                     </span>
+                                    {member.role != "ADMIN" && (
+                                        <div className="flex gap-4">
+                                            {memberOptions.map((option) => (
+                                                <span
+                                                    key={option.id}
+                                                    className={`mt-2 ${option.bgcolor} ${option.border} border-2 rounded-md shadow-lg `}>
+                                                    <button
+                                                        className="w-full text-left px-4 py-2 text-sm text-gray-700 cursor-pointer"
+                                                        onClick={handleMember(
+                                                            option.action,
+                                                            member,
+                                                            teamId
+                                                        )}>
+                                                        {option.label}
+                                                    </button>
+                                                </span>
+                                            ))}
+                                        </div>
+                                    )}
                                 </div>
                             ))
                         ) : (
-                            <p className="text-gray-500 dark:text-gray-400 text-sm text-center py-4">
+                            <p className="text-secondary/80 text-sm text-center py-4">
                                 No members yet
                             </p>
                         )}
@@ -139,58 +190,35 @@ const TeamDetails: React.FC<TeamDetailsProps> = ({
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <button
-                        className="flex items-center justify-center gap-2 p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 
+                        className="flex items-center justify-center gap-2 p-4 border-2 border-dashed border-gray-300 dark:border-secondary 
                     rounded-lg hover:border-blue-400 dark:hover:border-blue-500 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors cursor-pointer">
-                        <Upload className="w-5 h-5 text-blue-600 dark:text-blue-400" />
-                        <span className="text-blue-600 dark:text-blue-400 font-medium">
+                        <Upload className="w-5 h-5 text-chart-1 dark:text-chart-1" />
+                        <span className="text-chart-1 dark:text-chart-1 font-medium">
                             Upload File
                         </span>
                     </button>
 
                     <button
-                        className="flex items-center justify-center gap-2 p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg 
-                    hover:border-green-400 dark:hover:border-green-500 hover:bg-green-50 dark:hover:bg-green-900/20 transition-colors cursor-pointer">
-                        <Calendar className="w-5 h-5 text-green-600 dark:text-green-400" />
-                        <span className="text-green-600 dark:text-green-400 font-medium">
+                        className="flex items-center justify-center gap-2 p-4 border-2 border-dashed border-gray-300 dark:border-secondary rounded-lg 
+                    hover:border-chart-2 dark:hover:border-chart-2 hover:bg-chart-2/20 dark:hover:bg-chart-2/30 transition-colors cursor-pointer">
+                        <Calendar className="w-5 h-5 text-chart-2 dark:text-chart-2" />
+                        <span className="text-chart-2 dark:text-chart-2 font-medium">
                             Schedule Meeting
                         </span>
                     </button>
 
                     <button
-                        className="flex items-center justify-center gap-2 p-4 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg
-                         hover:border-purple-400 dark:hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/20 transition-colors cursor-pointer"
+                        className="flex items-center justify-center gap-2 p-4 border-2 border-dashed border-gray-300 dark:border-secondary rounded-lg
+                         hover:border-chart-4 dark:hover:border-chart-4 hover:bg-chart-4/20 dark:hover:bg-chart-4/30 transition-colors cursor-pointer"
                         onClick={() => OnViewChat(!viewChat)}>
-                        <MessageCircle className="w-5 h-5 text-purple-600 dark:text-purple-400" />
-                        <span className="text-purple-600 dark:text-purple-400 font-medium">
+                        <MessageCircle className="w-5 h-5 text-chart-4" />
+                        <span className="text-chart-4 font-medium">
                             {!viewChat ? <p>Start Chat</p> : <p>Close Chat</p>}
                         </span>
                     </button>
                 </div>
             </div>
 
-            {/* Role Management Modal */}
-            {showRoleModal && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-                        <h2 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">
-                            Manage Team Roles
-                        </h2>
-                        <p className="text-gray-600 dark:text-gray-400 mb-4">
-                            Update member roles and permissions for {team.name}.
-                        </p>
-                        <div className="flex justify-end gap-3">
-                            <button
-                                onClick={() => setShowRoleModal(false)}
-                                className="px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                                Cancel
-                            </button>
-                            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
-                                Save Changes
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
             {dialogOpen && (
                 <ShareLinkModal
                     content={inviteUrl}
