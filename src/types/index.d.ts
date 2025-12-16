@@ -1,5 +1,3 @@
-import { LoginData } from "./auth";
-// User matches Prisma User model
 export interface User {
     id: string;
     name: string;

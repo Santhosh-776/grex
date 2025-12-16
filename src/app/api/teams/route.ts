@@ -27,6 +27,7 @@ export async function GET(req: NextRequest) {
             {
                 success: false,
                 error: "Failed to fetch teams",
+                err,
             },
             {
                 status: 500,

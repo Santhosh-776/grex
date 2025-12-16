@@ -36,7 +36,7 @@ export async function GET() {
         return NextResponse.json({ user });
     } catch (error) {
         const res = NextResponse.json(
-            { message: "Invalid auth token" },
+            { message: "Invalid auth token", error },
             { status: 401 }
         );
         res.cookies.delete("auth-token");

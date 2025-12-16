@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { CreateUserData, LoginData } from "@/types/auth";
-import { findUserByEmail, getUserRoles } from "./userServices";
+import { findUserByEmail } from "./userServices";
 import { verifyPassword } from "@/utils/hash";
 import { createAuthToken } from "@/utils/jwt";
 import axios from "axios";
@@ -44,7 +44,6 @@ export const authenticateUser = async (data: LoginData) => {
         if (!isValidPassword) {
             return null;
         }
-        const roles = await getUserRoles(user.id);
         const tokenPayload = {
             id: user.id,
             email: user.email,

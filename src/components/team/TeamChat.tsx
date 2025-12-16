@@ -18,7 +18,7 @@ interface TeamChatProps {
     team: Team;
 }
 
-const TeamChat: React.FC<TeamChatProps> = ({ team }) => {
+const TeamChat: React.FC<TeamChatProps> = () => {
     const [chatMessage, setChatMessage] = useState("");
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
 

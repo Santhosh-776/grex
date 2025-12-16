@@ -22,18 +22,3 @@ export interface UserData {
     profileImage?: string | null;
     createdAt: Date;
 }
-roles: {
-    memberships: Array<{
-        id: string;
-        role: string;
-        team: {
-            id: string;
-            name: string;
-        };
-    }>;
-    ownedTeams: Array<{
-        id: string;
-        name: string;
-        createdAt: Date;
-    }>;
-}

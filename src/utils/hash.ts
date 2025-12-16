@@ -11,6 +11,7 @@ export const hashPassword = async (password: string): Promise<HashResult> => {
         const hashedPassword = await bcrypt.hash(password, 10);
         return { success: true, hashedPassword };
     } catch (err) {
+        console.log(err);
         return { success: false, error: "Password hashing failed" };
     }
 };
@@ -26,6 +27,7 @@ export const verifyPassword = async (
             return { success: false, error: "Password Not Matched" };
         }
     } catch (err) {
+        console.log(err);
         return { success: false, error: "Password comparison failed" };
     }
 };

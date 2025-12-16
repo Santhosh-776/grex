@@ -109,6 +109,7 @@ export const AcceptInviteLink = async (token: string, userId: string) => {
         });
         return { success: true, message: "Joined the team!" };
     } catch (error) {
+        console.log(error);
         return { success: false, error: "Something went wrong" };
     }
 };

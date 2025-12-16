@@ -1,7 +1,6 @@
 "use client";
 
 import { Users } from "lucide-react";
-import { Team } from "@/types";
 import { useTeamStore } from "@/store/useTeamStore";
 import { useUserStore } from "@/store/useUserStore";
 import axios from "axios";

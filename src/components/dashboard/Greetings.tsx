@@ -5,7 +5,7 @@ const Greetings = () => {
         <div className="mb-8">
             <h1 className="text-3xl font-bold mb-2">Good morning! 👋</h1>
             <p className="text-secondary">
-                Here's what's happening with your teams today.
+                Here&apos;s what&apos;s happening with your teams today.
             </p>
         </div>
     );

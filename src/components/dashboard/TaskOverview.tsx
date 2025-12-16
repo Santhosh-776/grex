@@ -73,7 +73,7 @@ const TaskOverview = () => {
                             <div className="w-2 h-2 bg-green-500 rounded-full mt-2"></div>
                             <div>
                                 <p className="text-sm text-secondary">
-                                    Meeting "Weekly Standup" started
+                                    Meeting &ldquo;Weekly Standup&rdquo; started
                                 </p>
                                 <span className="text-xs text-gray-500">
                                     15 minutes ago

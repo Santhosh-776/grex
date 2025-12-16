@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { Search, Bell, User, ChevronDown } from "lucide-react";
+import { Search, Bell, ChevronDown } from "lucide-react";
 import NotificationDropdown from "./NotificationDropdown";
 import { useRouter } from "next/navigation";
 import { logout } from "@/services/authServices";

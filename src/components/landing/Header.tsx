@@ -22,6 +22,7 @@ const Header: React.FC = () => {
                 });
                 setUser(response.data.user);
             } catch (err) {
+                console.log("No logged in user", err);
                 clearUser();
             } finally {
                 setLoading(false);
