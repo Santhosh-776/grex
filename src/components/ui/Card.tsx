@@ -24,9 +24,9 @@ const Card: React.FC<CardProps> = ({
             } ${variant === "elevated" ? "shadow-lg" : ""}`}>
             {title && <h2 className="text-xl font-bold">{title}</h2>}
             {subtitle && (
-                <h3 className="text-sm  text-shadow-gray-600">{subtitle}</h3>
+                <h3 className="text-sm  text-shadow-secondary">{subtitle}</h3>
             )}
-            {content && <p className="text-gray-700">{content}</p>}
+            {content && <p className="text-secondary">{content}</p>}
             {<div className="my-6">{children}</div>}
         </div>
     );

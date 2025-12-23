@@ -1,38 +1,25 @@
-"use client";
-
-import React from "react";
 import CreateTeamModal from "./CreateTeamModal";
+import TeamList from "./TeamList";
 
 const TeamsUI = () => {
     return (
-        <div className=" ml-64 pt-16">
-            <section className="flex justify-between items-center">
+        <div className="mx-auto ml-64 pt-16 p-6">
+            <div className="flex items-center justify-between mb-6">
                 <div>
-                    <p className="text-3xl font-bold">Teams</p>
-                    <p className="text-sm text-gray-600">
-                        Manage your teams and collaborate effectively.
+                    <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2">
+                        Teams
+                    </h1>
+                    <p className="text-secondary dark:text-gray-400">
+                        Manage your teams and collaborate effectively
                     </p>
                 </div>
-                <div>
-                    <CreateTeamModal />
-                </div>
-            </section>
 
-            <section className="mt-8 flex gap-6">
-                <div className="border border-dashed border-gray-300 rounded-lg h-64 flex items-center justify-center text-gray-400 w-2/5 bg-white">
-                    Team List Component Placeholder
-                </div>
-                <div className="w-3/5 space-y-6">
-                    <div className="border border-dashed border-gray-300  h-64 flex items-center justify-center text-gray-400 bg-white p-4 rounded-lg shadow">
-                        Team List Component Placeholder
-                    </div>
-                    <div>
-                        <div className="border border-dashed border-gray-300  h-64 flex items-center justify-center text-gray-400 bg-white p-4 rounded-lg shadow">
-                            Team Details Component Placeholder
-                        </div>
-                    </div>
-                </div>
-            </section>
+                <CreateTeamModal />
+            </div>
+
+            <div className="">
+                <TeamList />
+            </div>
         </div>
     );
 };

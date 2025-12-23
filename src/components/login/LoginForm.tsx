@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Eye, EyeOff, Mail, Lock, ArrowRight } from "lucide-react";
 import axios from "axios";
@@ -13,7 +13,17 @@ const LoginForm = () => {
     const [rememberMe, setRememberMe] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [redirectTo, setRedirectTo] = useState("/dashboard");
+
     const setUser = useUserStore((state) => state.setUser);
+
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            const params = new URLSearchParams(window.location.search);
+            const redir = params.get("redirectTo");
+            if (redir) setRedirectTo(redir);
+        }
+    }, []);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -27,20 +37,19 @@ const LoginForm = () => {
 
         try {
             const response = await axios.post(
-                "/api/auth/login",
-                {
-                    email,
-                    password,
-                    rememberMe,
-                },
-                {
-                    withCredentials: true,
-                }
+                `/api/auth/login?redirectTo=${encodeURIComponent(redirectTo)}`,
+                { email, password, rememberMe },
+                { withCredentials: true }
             );
 
             if (response.data.user) {
                 setUser(response.data.user);
-                router.push("/dashboard");
+
+                if (response.data.redirect?.url) {
+                    router.push(response.data.redirect.url);
+                } else {
+                    router.push(redirectTo);
+                }
             }
         } catch (err: any) {
             setError(
@@ -63,7 +72,7 @@ const LoginForm = () => {
                 onSubmit={handleSubmit}
                 className="space-y-6">
                 <div>
-                    <label className="block text-sm font-medium mb-2 text-gray-700">
+                    <label className="block text-sm font-medium mb-2 text-secondary">
                         Email Address
                     </label>
                     <div className="relative">
@@ -79,7 +88,7 @@ const LoginForm = () => {
                 </div>
 
                 <div>
-                    <label className="block text-sm font-medium mb-2 text-gray-700">
+                    <label className="block text-sm font-medium mb-2 text-secondary">
                         Password
                     </label>
                     <div className="relative">
@@ -94,7 +103,7 @@ const LoginForm = () => {
                         <button
                             type="button"
                             onClick={() => setShowPassword(!showPassword)}
-                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 transition-colors">
+                            className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-secondary transition-colors">
                             {showPassword ? (
                                 <EyeOff className="w-5 h-5" />
                             ) : (
@@ -139,8 +148,8 @@ const LoginForm = () => {
             </form>
 
             <div className="mt-6 text-center text-sm">
-                <p className="text-gray-600">
-                    Don't have an account?{" "}
+                <p className="text-secondary">
+                    Don&apos;t have an account?{" "}
                     <a
                         href="/signup"
                         className="text-blue-600 hover:text-blue-700 font-medium transition-colors">

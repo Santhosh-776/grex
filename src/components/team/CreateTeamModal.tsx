@@ -18,7 +18,6 @@ const CreateTeamModal = () => {
         <Dialog
             open={open}
             onOpenChange={setOpen}>
-            {/* The trigger can be any button or link */}
             <DialogTrigger asChild>
                 <button className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-700 flex items-center">
                     <Plus className="inline-block mr-2" />

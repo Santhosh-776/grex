@@ -18,7 +18,7 @@ const AuthPageUI = () => {
                         <span className="text-blue-600">Meet Smarter</span>
                     </h1>
 
-                    <p className={`text-xl mb-8 max-w-md mx-auto lg:mx-0`}>
+                    <p className={`text-xl mb-8 -md mx-auto lg:mx-0`}>
                         Streamline your team collaboration with integrated
                         meetings, task management, and file sharing.
                     </p>

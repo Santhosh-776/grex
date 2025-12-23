@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Calendar, Clock } from "lucide-react";
 import { upcomingMeetings } from "@/constants/dashboard";
+import Image from "next/image";
 const UpcomingMeetings = () => {
     return (
         <div className="lg:col-span-2">
@@ -45,7 +46,7 @@ const UpcomingMeetings = () => {
                                             {meeting.participants
                                                 .slice(0, 3)
                                                 .map((participant, idx) => (
-                                                    <img
+                                                    <Image
                                                         key={idx}
                                                         src={participant.avatar}
                                                         alt={participant.name}

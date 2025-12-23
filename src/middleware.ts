@@ -5,9 +5,8 @@ export async function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
     const token = request.cookies.get("auth-token")?.value;
 
-    const protectedRoutes = ["/dashboard", "/profile", "/settings"];
+    const protectedRoutes = ["/dashboard", "/profile", "/settings", "/teams"];
     const authRoutes = ["/login", "/signup"];
-    const publicRoutes = ["/", "/about", "/contact"];
 
     const isProtectedRoute = protectedRoutes.some((route) =>
         pathname.startsWith(route)
@@ -19,7 +18,7 @@ export async function middleware(request: NextRequest) {
     if (token) {
         try {
             const secret = new TextEncoder().encode(process.env.JWT_SECRET!);
-            const { payload } = await jwtVerify(token, secret);
+            await jwtVerify(token, secret);
 
             isAuthenticated = true;
         } catch (error) {
@@ -38,7 +37,6 @@ export async function middleware(request: NextRequest) {
             ? NextResponse.redirect(new URL("/login", request.url))
             : NextResponse.next();
 
-        // Properly clear the cookie
         response.cookies.set("auth-token", "", {
             httpOnly: true,
             secure: process.env.NODE_ENV === "production",
@@ -50,12 +48,14 @@ export async function middleware(request: NextRequest) {
         return response;
     }
 
-    // Redirect logic for valid/no token cases
     if (isProtectedRoute && !isAuthenticated) {
         console.log(
             "Redirecting to login - no valid token for protected route"
         );
-        return NextResponse.redirect(new URL("/login", request.url));
+        const loginUrl = new URL("/login", request.url);
+        loginUrl.searchParams.set("redirectTo", pathname);
+
+        return NextResponse.redirect(loginUrl);
     }
 
     if (isAuthRoute && isAuthenticated) {

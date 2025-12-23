@@ -34,8 +34,9 @@ model Team {
   meetings     Meeting[]
   Notification Notification[]
   Task         Task[]
-  createdBy    User           @relation("CreatedTeams", fields: [userId], references: [id])
+  createdBy    User           @relation("CreatedTeams", fields: [userId], references: [id], onDelete: Cascade)
   members      TeamMember[]
+  invites      Invite[]
 }
 
 model TeamMember {
@@ -44,10 +45,20 @@ model TeamMember {
   teamId   String
   role     Role
   joinedAt DateTime @default(now())
-  team     Team     @relation(fields: [teamId], references: [id])
-  user     User     @relation(fields: [userId], references: [id])
+  team     Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, teamId])
+}
+
+model Invite {
+  id        String    @id @default(uuid())
+  token     String    @unique
+  teamId    String
+  team      Team      @relation(fields: [teamId], references: [id])
+  createdAt DateTime  @default(now())
+  expiresAt DateTime?
+  used      Boolean   @default(false)
 }
 
 model Note {

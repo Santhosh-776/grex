@@ -104,7 +104,7 @@ const NotificationDropdown: React.FC<NotificationDropdownProps> = ({
                                         <h4 className="font-medium text-gray-900">
                                             {notification.title}
                                         </h4>
-                                        <p className="text-sm text-gray-600 mt-1">
+                                        <p className="text-sm text-secondary mt-1">
                                             {notification.message}
                                         </p>
                                         <span className="text-xs text-gray-500 mt-2 block">
