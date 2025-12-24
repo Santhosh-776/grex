@@ -47,6 +47,8 @@ const UpcomingMeetings = () => {
                                                 .slice(0, 3)
                                                 .map((participant, idx) => (
                                                     <Image
+                                                        width={50}
+                                                        height={50}
                                                         key={idx}
                                                         src={participant.avatar}
                                                         alt={participant.name}

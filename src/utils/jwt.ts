@@ -1,4 +1,4 @@
-import { SignJWT } from "jose";
+import { SignJWT, jwtVerify } from "jose";
 
 type JwtPayload = {
     id: string;
@@ -15,4 +15,9 @@ export const createAuthToken = async (payload: JwtPayload): Promise<string> => {
         .setExpirationTime(payload.rememberMe ? "7d" : "1d")
         .sign(secretKey);
     return jwt;
+};
+
+export const verifyAuthToken = async (token: string): Promise<JwtPayload> => {
+    const { payload } = await jwtVerify(token, secretKey);
+    return payload as JwtPayload;
 };

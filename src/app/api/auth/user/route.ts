@@ -1,7 +1,9 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import jwt from "jsonwebtoken";
+import { verifyAuthToken } from "@/utils/jwt";
 import { findUserById } from "@/services/userServices";
+
+const secretKey = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function GET() {
     const cookieStore = await cookies();
@@ -13,9 +15,9 @@ export async function GET() {
         );
     }
     try {
-        const decoded = jwt.verify(authToken, process.env.JWT_SECRET!) as any;
+        const payload = await verifyAuthToken(authToken);
 
-        if (!decoded?.id) {
+        if (!payload?.id) {
             const res = NextResponse.json(
                 { message: "Invalid auth token" },
                 { status: 401 }
@@ -24,7 +26,7 @@ export async function GET() {
             return res;
         }
 
-        const user = await findUserById(decoded.id);
+        const user = await findUserById(payload.id);
 
         if (!user) {
             return NextResponse.json(
