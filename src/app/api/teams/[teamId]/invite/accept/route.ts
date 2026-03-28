@@ -1,43 +1,28 @@
-import { teamRequestSchema } from "@/schemas/team";
-import { AcceptInviteLink } from "@/services/teamServices";
 import { NextRequest, NextResponse } from "next/server";
+import axiosInstance from "@/lib/axios";
+import axios from "axios";
 
 export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
-
-        const parsed = teamRequestSchema.safeParse(body);
-        if (!parsed.success) {
-            console.log("Invalid LInk");
-            return NextResponse.json(
-                {
-                    data: "Invalid link",
-                    success: false,
-                },
-                {
-                    status: 500,
-                }
-            );
-        }
-        const { token, userId } = parsed.data;
-        if (token && userId) {
-            const data = await AcceptInviteLink(token, userId);
-
-            if (data.success) {
-                console.log(data);
-                return NextResponse.json({ data });
-            }
-        }
-    } catch (error) {
-        console.log(error);
-        return NextResponse.json(
+        const response = await axiosInstance.post(
+            "/teams/invite/accept",
+            body,
             {
-                data: "Error while joining",
-                success: false,
+                headers: { cookie: req.headers.get("cookie") || "" },
             },
-            {
-                status: 500,
-            }
+        );
+        return NextResponse.json(response.data);
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            const status = error.response?.status || 500;
+            const message =
+                error.response?.data?.message || "Error while joining team";
+            return NextResponse.json({ message }, { status });
+        }
+        return NextResponse.json(
+            { message: "Error while joining team" },
+            { status: 500 },
         );
     }
 }

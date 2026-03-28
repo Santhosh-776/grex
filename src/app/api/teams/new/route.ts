@@ -1,33 +1,24 @@
 import { NextRequest, NextResponse } from "next/server";
-import { createTeam } from "@/services/teamServices";
+import axiosInstance from "@/lib/axios";
+import axios from "axios";
 
-export async function POST(request: NextRequest) {
+export async function POST(req: NextRequest) {
     try {
-        const teamData = await request.json();
-
-        console.log("Received team data:", teamData);
-
-        if (!teamData.name || !teamData.createdBy) {
-            return NextResponse.json(
-                { error: "Name and createdBy are required" },
-                { status: 400 }
-            );
+        const body = await req.json();
+        const response = await axiosInstance.post("/teams", body, {
+            headers: { cookie: req.headers.get("cookie") || "" },
+        });
+        return NextResponse.json(response.data, { status: 201 });
+    } catch (error: unknown) {
+        if (axios.isAxiosError(error)) {
+            const status = error.response?.status || 500;
+            const message =
+                error.response?.data?.message || "Failed to create team";
+            return NextResponse.json({ message }, { status });
         }
-
-        const newTeam = await createTeam(teamData);
-
         return NextResponse.json(
-            {
-                success: true,
-                team: newTeam,
-            },
-            { status: 201 }
-        );
-    } catch (error) {
-        console.error("Error creating team:", error);
-        return NextResponse.json(
-            { error: "Failed to create team" },
-            { status: 500 }
+            { message: "Failed to create team" },
+            { status: 500 },
         );
     }
 }

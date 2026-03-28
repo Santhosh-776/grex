@@ -39,7 +39,7 @@ export const authenticateUser = async (data: LoginData) => {
 
         const isValidPassword = await verifyPassword(
             data.password,
-            user.hashedPassword
+            user.hashedPassword,
         );
         if (!isValidPassword) {
             return null;
@@ -71,7 +71,7 @@ export const logout = async () => {
     const res = await axios.post(
         "/api/auth/logout",
         {},
-        { withCredentials: true }
+        { withCredentials: true },
     );
     return res.data;
 };
