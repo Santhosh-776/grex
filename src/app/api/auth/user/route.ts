@@ -1,47 +1,30 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { verifyAuthToken } from "@/utils/jwt";
-import { findUserById } from "@/services/userServices";
-
-const secretKey = new TextEncoder().encode(process.env.JWT_SECRET);
+import axiosInstance from "@/lib/axios";
 
 export async function GET() {
-    const cookieStore = await cookies();
-    const authToken = cookieStore.get("auth-token")?.value;
-    if (!authToken) {
-        return NextResponse.json(
-            { message: "No auth token found" },
-            { status: 401 }
-        );
-    }
     try {
-        const payload = await verifyAuthToken(authToken);
+        const cookieStore = await cookies();
+        const authToken = cookieStore.get("auth-token")?.value;
 
-        if (!payload?.id) {
-            const res = NextResponse.json(
-                { message: "Invalid auth token" },
-                { status: 401 }
-            );
+        const response = await axiosInstance.get("/auth/me", {
+            headers: {
+                Cookie: `auth-token=${authToken}`,
+            },
+        });
+
+        return NextResponse.json(response.data);
+    } catch (error: unknown) {
+        const status = (error as any).response?.status || 500;
+        const message =
+            (error as any).response?.data?.message || "Internal server error";
+
+        const res = NextResponse.json({ message }, { status });
+
+        if (status === 401) {
             res.cookies.delete("auth-token");
-            return res;
         }
 
-        const user = await findUserById(payload.id);
-
-        if (!user) {
-            return NextResponse.json(
-                { message: "User not found" },
-                { status: 404 }
-            );
-        }
-
-        return NextResponse.json({ user });
-    } catch (error) {
-        const res = NextResponse.json(
-            { message: "Invalid auth token", error },
-            { status: 401 }
-        );
-        res.cookies.delete("auth-token");
         return res;
     }
 }

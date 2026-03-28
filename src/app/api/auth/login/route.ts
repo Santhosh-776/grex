@@ -1,87 +1,47 @@
 import { NextRequest, NextResponse } from "next/server";
-import { z } from "zod";
 
-import { verifyPassword } from "@/utils/hash";
-import { findUserByEmail } from "@/services/userServices";
-import { createAuthToken } from "@/utils/jwt";
-
-const loginSchema = z.object({
-    email: z.email("Invalid email address"),
-    password: z.string().min(6, "Password must be at least 6 chars"),
-    rememberMe: z.boolean().optional(),
-});
-
+import axiosInstance from "@/lib/axios";
 export async function POST(request: NextRequest) {
     try {
         const body = await request.json();
         const redirectTo =
             request.nextUrl.searchParams.get("redirectTo") || "/dashboard";
         const absoluteRedirectUrl = new URL(redirectTo, request.url);
+        const res = await axiosInstance.post(`/auth/login`, body);
 
-        const parseResult = loginSchema.safeParse(body);
-        if (!parseResult.success) {
+        const backendUser = res.data.data;
+
+        if (!backendUser) {
+            console.error("Unexpected backend response shape:", res.data);
             return NextResponse.json(
-                {
-                    message: "Invalid input",
-                    errors: z.treeifyError(parseResult.error),
-                },
-                { status: 400 }
+                { message: "Invalid backend response" },
+                { status: 502 },
             );
         }
-
-        const data = parseResult.data;
-
-        const user = await findUserByEmail(data.email);
-        if (!user) {
-            return NextResponse.json(
-                { message: "Invalid email or password" },
-                { status: 401 }
-            );
-        }
-
-        const isValidPassword = await verifyPassword(
-            data.password,
-            user.hashedPassword
-        );
-        if (!isValidPassword.success) {
-            return NextResponse.json(
-                { message: "Invalid email or password" },
-                { status: 401 }
-            );
-        }
-        const tokenPayload = {
-            id: user.id,
-            email: user.email,
-            rememberMe: data.rememberMe || false,
-        };
-        const token = await createAuthToken(tokenPayload);
+        const setCookie = res.headers["set-cookie"];
         const response = NextResponse.json(
             {
                 user: {
-                    id: user.id,
-                    email: user.email,
-                    profile: user.profileImage,
+                    id: backendUser.id,
+                    email: backendUser.email,
+                    profile: backendUser.profileImage,
                 },
                 redirect: {
                     url: absoluteRedirectUrl,
                 },
             },
-            { status: 200 }
+            { status: 200 },
         );
-        response.cookies.set("auth-token", token, {
-            httpOnly: true,
-            secure: false /*process.env.NODE_ENV === "production"*/,
-            sameSite: "lax",
-            maxAge: data.rememberMe ? 7 * 24 * 60 * 60 : 24 * 60 * 60,
-            path: "/",
-        });
-        console.log("url in route", absoluteRedirectUrl);
+        console.log(response.body);
+        if (setCookie) {
+            response.headers.set("set-cookie", setCookie[0]);
+        }
         return response;
     } catch (error) {
         console.error("Login route error:", error);
         return NextResponse.json(
             { message: "Internal server error", error: String(error) },
-            { status: 500 }
+            { status: 500 },
         );
     }
 }

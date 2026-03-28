@@ -39,12 +39,12 @@ const LoginForm = () => {
             const response = await axios.post(
                 `/api/auth/login?redirectTo=${encodeURIComponent(redirectTo)}`,
                 { email, password, rememberMe },
-                { withCredentials: true }
+                { withCredentials: true },
             );
 
             if (response.data.user) {
                 setUser(response.data.user);
-
+                console.log("redirect url", redirectTo);
                 if (response.data.redirect?.url) {
                     router.push(response.data.redirect.url);
                 } else {
@@ -53,7 +53,8 @@ const LoginForm = () => {
             }
         } catch (err: any) {
             setError(
-                err.response?.data?.message || "Login failed. Please try again."
+                err.response?.data?.message ||
+                    "Login failed. Please try again.",
             );
         } finally {
             setIsLoading(false);

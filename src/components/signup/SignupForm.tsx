@@ -29,11 +29,10 @@ const SignupForm = () => {
         }
 
         try {
-            const res = await axios.post("api/auth/signup", {
+            const res = await axios.post("/api/auth/signup", {
                 name,
                 email,
                 password,
-                confirmPassword,
                 profileImage,
             });
 
